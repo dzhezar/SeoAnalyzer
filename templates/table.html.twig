@@ -1,0 +1,19 @@
+<table class="table">
+{% for key,value_array in array  %}
+    <tr>
+        <td>
+    {{ key }}
+        </td>
+        <td>
+            <ul>
+    {% for value in value_array %}
+            <li>
+        {{ value }}
+            </li>
+    {% endfor %}
+            </ul>
+        </td>
+    </tr>
+
+{% endfor %}
+</table>

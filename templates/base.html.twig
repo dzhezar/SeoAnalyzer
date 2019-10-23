@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        {% endblock %}
+    </head>
+    <body>
+        {% block body %}
+            <div class="row container m-auto">
+                <div class="col-4" style="display:flex; place-content: center;">
+                    {{ form_start(form, {'attr': {'id': 'myform'}})}}
+                    {{ form_widget(form.url) }}
+                    {{ form_widget(form.choices) }}
+                    <div style="display: flex; justify-content: space-between">
+                        {{ form_widget(form.submit) }}
+                        <button type="button" class="btn btn-warning" id="clear">Clear</button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+                <div class="col-8" id="table" style="place-content: center;">
+
+                </div>
+            </div>
+
+        {% endblock %}
+        {% block javascripts %}
+            <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+            <script>
+                // document.getElementById('clear').addEventListener('click',function () {
+                //     document.getElementById('myform').reset();
+                // })
+                $(document).ready(function () {
+                    $('#myform').on('submit',function (e) {
+                        e.preventDefault();
+                        let array = [];
+                        $("input:checkbox:checked").each(function () {
+                           array.push($('label[for="' + this.id + '"]').html());
+                        });
+                        $.ajax({
+                                url:'/search',
+                                data: {
+                                    url: $('#input_form_url').val(),
+                                    options: array
+                                }
+                            }
+                        )
+                            .done(function (data) {
+                                $('#table').append(data);
+                            })
+                    });
+                });
+            </script>
+        {% endblock %}
+    </body>
+</html>
